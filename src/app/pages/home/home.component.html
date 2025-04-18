@@ -1,0 +1,29 @@
+<div class="container mt-5">
+    <h2 class="mb-4">Bienvenue sur QuizApp !</h2>
+  
+    <form (ngSubmit)="startQuiz()">
+      <div class="mb-3">
+        <label for="category" class="form-label">Catégorie :</label>
+        <select [(ngModel)]="category" name="category" id="category" class="form-select" required>
+          <option [ngValue]="null" disabled selected>Choisissez une catégorie</option>
+          <option [value]="9">Culture Générale</option>
+          <option [value]="21">Sport</option>
+          <option [value]="23">Histoire</option>
+          <option [value]="17">Science</option>
+        </select>
+      </div>
+  
+      <div class="mb-3">
+        <label for="difficulty" class="form-label">Difficulté :</label>
+        <select [(ngModel)]="difficulty" name="difficulty" id="difficulty" class="form-select" required>
+          <option [ngValue]="null" disabled selected>Choisissez une difficulté</option>
+          <option value="easy">Facile</option>
+          <option value="medium">Moyenne</option>
+          <option value="hard">Difficile</option>
+        </select>
+      </div>
+  
+      <button type="submit" class="btn btn-primary">Commencer le Quiz</button>
+    </form>
+  </div>
+  

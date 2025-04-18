@@ -1,0 +1,32 @@
+<div *ngIf="questions.length > 0 && !showResult; else loading">
+    <div class="card p-3 mb-3">
+      <h4>Question {{ currentIndex + 1 }} / {{ questions.length }}</h4>
+      <p [innerHTML]="questions[currentIndex].question"></p>
+  
+      <ul class="list-group">
+        <li 
+          *ngFor="let answer of shuffledAnswers" 
+          class="list-group-item"
+          [ngClass]="{
+            'bg-success text-white': userAnswer === answer && answer === questions[currentIndex].correct_answer,
+            'bg-danger text-white': userAnswer === answer && answer !== questions[currentIndex].correct_answer
+          }"
+          (click)="!userAnswer && selectAnswer(answer)"
+          style="cursor: pointer"
+        >
+          {{ answer }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <ng-template #loading>
+    <p>Chargement des questions...</p>
+  </ng-template>
+  
+  <div *ngIf="showResult" class="alert alert-info mt-4">
+    <h3>Résultat final :</h3>
+    <p>Score : {{ score }} / {{ questions.length }}</p>
+    <button class="btn btn-primary" routerLink="/">Rejouer</button>
+  </div>
+  
