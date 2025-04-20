@@ -1,0 +1,86 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div *ngIf="currentQuestion" class="card question-card shadow-lg fade-in">
+        <!-- En-tête avec progression et timer -->
+        <div class="card-header">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="badge bg-primary">Question {{ currentIndex + 1 }}/{{ totalQuestions }}</span>
+            <span *ngIf="timedMode" class="badge" [ngClass]="{'bg-success': timeLeft > 10, 'bg-warning': timeLeft <= 10 && timeLeft > 5, 'bg-danger': timeLeft <= 5}">
+              <i class="bi bi-clock"></i> {{ timeLeft }}s
+            </span>
+          </div>
+          <div class="progress mt-2" style="height: 8px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                 [style.width.%]="(currentIndex / totalQuestions) * 100"></div>
+          </div>
+        </div>
+        
+        <!-- Corps avec question et réponses -->
+        <div class="card-body p-4">
+          <!-- Catégorie et difficulté -->
+          <div class="d-flex justify-content-between mb-3">
+            <span class="badge bg-secondary">{{ currentQuestion.category }}</span>
+            <span class="badge" 
+                  [ngClass]="{'bg-success': currentQuestion.difficulty === 'easy', 
+                             'bg-warning': currentQuestion.difficulty === 'medium', 
+                             'bg-danger': currentQuestion.difficulty === 'hard'}">
+              {{ currentQuestion.difficulty | titlecase }}
+            </span>
+          </div>
+          
+          <!-- Question -->
+          <h4 class="card-title mb-4" [innerHTML]="currentQuestion.question"></h4>
+          
+          <!-- Réponses -->
+          <div class="answers-container">
+            <div *ngFor="let answer of currentQuestion.all_answers; let i = index" 
+                 class="answer-option"
+                 [ngClass]="{'correct': answerSubmitted && answer === currentQuestion.correct_answer,
+                            'incorrect': answerSubmitted && selectedAnswer === answer && answer !== currentQuestion.correct_answer,
+                            'selected': selectedAnswer === answer && !answerSubmitted}"
+                 (click)="selectAnswer(answer)">
+              <div class="d-flex align-items-center">
+                <span class="answer-letter">{{ ['A', 'B', 'C', 'D'][i] }}</span>
+                <span [innerHTML]="answer"></span>
+              </div>
+              <div *ngIf="answerSubmitted" class="answer-icon">
+                <i *ngIf="answer === currentQuestion.correct_answer" class="bi bi-check-circle-fill text-success"></i>
+                <i *ngIf="selectedAnswer === answer && answer !== currentQuestion.correct_answer" class="bi bi-x-circle-fill text-danger"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pied avec boutons -->
+        <div class="card-footer d-flex justify-content-between">
+          <button class="btn btn-outline-secondary" (click)="quitQuiz()">
+            <i class="bi bi-box-arrow-left"></i> Quitter
+          </button>
+          <button *ngIf="!answerSubmitted" class="btn btn-primary" [disabled]="!selectedAnswer" (click)="submitAnswer()">
+            Valider
+          </button>
+          <button *ngIf="answerSubmitted" class="btn btn-primary" (click)="nextQuestion()">
+            {{ isLastQuestion ? 'Voir les résultats' : 'Question suivante' }} <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Chargement -->
+      <div *ngIf="!currentQuestion && !error" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-3">Chargement du quiz...</p>
+      </div>
+      
+      <!-- Erreur -->
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+        <div class="mt-3">
+          <button class="btn btn-outline-primary" routerLink="/">Retour à l'accueil</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,83 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg fade-in">
+        <div class="card-header text-center" style="background-image: var(--background-gradient); color: white;">
+          <h2 class="my-3">Résultats du Quiz</h2>
+        </div>
+        <div class="card-body p-4 text-center">
+          <div class="score-display mb-4">
+            <div class="display-1 fw-bold mb-2">{{ score }}/{{ totalQuestions }}</div>
+            <div class="progress mb-3" style="height: 20px;">
+              <div class="progress-bar" 
+                   [ngClass]="{'bg-danger': scorePercentage < 40, 'bg-warning': scorePercentage >= 40 && scorePercentage < 70, 'bg-success': scorePercentage >= 70}"
+                   [style.width.%]="scorePercentage"></div>
+            </div>
+            <p class="lead">
+              {{ getFeedbackMessage() }}
+            </p>
+          </div>
+
+          <div class="stats-container row mb-4">
+            <div class="col-md-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <i class="bi bi-trophy fs-2 text-warning"></i>
+                  <h5 class="card-title">Score</h5>
+                  <p class="card-text">{{ scorePercentage }}%</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <i class="bi bi-clock fs-2 text-primary"></i>
+                  <h5 class="card-title">Temps</h5>
+                  <p class="card-text">{{ formatTime(totalTime) }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <i class="bi bi-lightning fs-2 text-success"></i>
+                  <h5 class="card-title">Difficulté</h5>
+                  <p class="card-text">{{ difficulty | titlecase }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!resultSaved" class="save-result-form mb-4">
+            <h4 class="mb-3">Enregistrer votre score</h4>
+            <form [formGroup]="saveForm" (ngSubmit)="saveResult()">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Votre nom" formControlName="username">
+                <button class="btn btn-primary" type="submit" [disabled]="saveForm.invalid">Enregistrer</button>
+              </div>
+              <div *ngIf="saveForm.get('username')?.invalid && saveForm.get('username')?.touched" class="text-danger">
+                Veuillez entrer un nom d'utilisateur.
+              </div>
+            </form>
+          </div>
+
+          <div *ngIf="resultSaved" class="alert alert-success">
+            Votre score a été enregistré avec succès !
+          </div>
+
+          <div class="d-flex justify-content-center gap-3 mt-4">
+            <button class="btn btn-primary" routerLink="/">
+              <i class="bi bi-house-door me-2"></i> Retour à l'accueil
+            </button>
+            <button class="btn btn-outline-primary" (click)="playAgain()">
+              <i class="bi bi-arrow-repeat me-2"></i> Rejouer
+            </button>
+            <button class="btn btn-outline-secondary" routerLink="/history">
+              <i class="bi bi-clock-history me-2"></i> Voir l'historique
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

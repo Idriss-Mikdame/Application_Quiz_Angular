@@ -1,0 +1,93 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow-lg">
+        <div class="card-header text-center" style="background-image: var(--background-gradient); color: white;">
+          <h2 class="my-3">Historique des Scores</h2>
+        </div>
+        <div class="card-body p-4">
+          <div *ngIf="quizHistory.length === 0" class="text-center py-5">
+            <i class="bi bi-emoji-frown fs-1 text-muted"></i>
+            <p class="lead mt-3">Aucun historique disponible</p>
+            <p>Jouez à quelques quiz pour voir vos scores ici !</p>
+            <button class="btn btn-primary mt-3" routerLink="/">
+              <i class="bi bi-controller me-2"></i> Jouer maintenant
+            </button>
+          </div>
+
+          <div *ngIf="quizHistory.length > 0">
+            <div class="d-flex justify-content-between mb-4 align-items-center">
+              <div>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-search"></i></span>
+                  <input type="text" class="form-control" placeholder="Rechercher..." [(ngModel)]="searchTerm">
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-primary" (click)="sortBy('date')">
+                  <i class="bi bi-calendar me-1"></i> Date
+                  <i *ngIf="sortColumn === 'date'" [ngClass]="{'bi-arrow-up': !sortAscending, 'bi-arrow-down': sortAscending}"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-primary" (click)="sortBy('score')">
+                  <i class="bi bi-trophy me-1"></i> Score
+                  <i *ngIf="sortColumn === 'score'" [ngClass]="{'bi-arrow-up': !sortAscending, 'bi-arrow-down': sortAscending}"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="clearHistory()">
+                  <i class="bi bi-trash me-1"></i> Effacer
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>Utilisateur</th>
+                    <th>Catégorie</th>
+                    <th>Difficulté</th>
+                    <th>Score</th>
+                    <th>Temps</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let result of filteredHistory">
+                    <td>{{ result.username }}</td>
+                    <td>{{ result.category }}</td>
+                    <td>
+                      <span class="badge" 
+                            [ngClass]="{'bg-success': result.difficulty === 'easy', 
+                                       'bg-warning': result.difficulty === 'medium', 
+                                       'bg-danger': result.difficulty === 'hard'}">
+                        {{ result.difficulty | titlecase }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <div class="me-2">{{ result.score }}/{{ result.totalQuestions }}</div>
+                        <div class="progress flex-grow-1" style="height: 8px; width: 80px;">
+                          <div class="progress-bar" 
+                               [ngClass]="{'bg-danger': getScorePercentage(result) < 40, 
+                                          'bg-warning': getScorePercentage(result) >= 40 && getScorePercentage(result) < 70, 
+                                          'bg-success': getScorePercentage(result) >= 70}"
+                               [style.width.%]="getScorePercentage(result)"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ formatTime(result.timeSpent) }}</td>
+                    <td>{{ result.date | date:'dd/MM/yyyy HH:mm' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-center">
+          <button class="btn btn-primary" routerLink="/">
+            <i class="bi bi-house-door me-2"></i> Retour à l'accueil
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
