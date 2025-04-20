@@ -1,1 +1,17 @@
-<p>history works!</p>
+<div class="container mt-4">
+  <h2>Historique des scores</h2>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Nom d'utilisateur</th>
+      <th>Score</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of history">
+      <td>{{ item.user }}</td>
+      <td>{{ item.score }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

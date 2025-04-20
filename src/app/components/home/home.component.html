@@ -1,1 +1,23 @@
-<p>home works!</p>
+<div class="home-wrapper">
+  <!-- Right: Quiz Form -->
+  <div class="form-section">
+    <h1>Bienvenue au Quiz</h1>
+    <form (ngSubmit)="startQuiz()">
+      <div class="mb-3">
+        <label>Catégorie:</label>
+        <select [(ngModel)]="category" name="category" class="form-control">
+          <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label>Difficulté:</label>
+        <select [(ngModel)]="difficulty" name="difficulty" class="form-control">
+          <option value="easy">Facile</option>
+          <option value="medium">Moyen</option>
+          <option value="hard">Difficile</option>
+        </select>
+      </div>
+      <button class="btn btn-primary">Démarrer</button>
+    </form>
+  </div>
+</div>

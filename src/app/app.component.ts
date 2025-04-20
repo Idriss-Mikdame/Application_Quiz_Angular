@@ -1,10 +1,15 @@
 import { Component } from '@angular/core';
+import {NavbarComponent} from './components/navbar/navbar.component';
+import {RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  standalone: false,
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  imports: [
+    NavbarComponent,
+    RouterOutlet
+  ],
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'quiz-app';

@@ -1,1 +1,21 @@
-<p>quiz works!</p>
+<div class="container mt-4" *ngIf="questions.length">
+  <div *ngIf="currentQuestion < questions.length">
+    <h4>Question {{ currentQuestion + 1 }} / {{ questions.length }}</h4>
+    <p [innerHTML]="questions[currentQuestion].question"></p>
+    <div class="list-group">
+      <button class="list-group-item list-group-item-action"
+              *ngFor="let ans of questions[currentQuestion].answers"
+              [class.list-group-item-success]="isAnswered && ans === correctAnswer"
+              [class.list-group-item-danger]="isAnswered && ans === selected && ans !== correctAnswer"
+              (click)="selectAnswer(ans)">
+        {{ ans }}
+      </button>
+    </div>
+  </div>
+  <div *ngIf="currentQuestion >= questions.length">
+    <h3>Quiz terminé !</h3>
+    <p>Votre score est : {{ score }}/{{ questions.length }}</p>
+    <input [(ngModel)]="username" placeholder="Nom d'utilisateur" class="form-control mb-2" />
+    <button class="btn btn-success" (click)="saveResult()">Enregistrer</button>
+  </div>
+</div>
